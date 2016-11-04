@@ -79,9 +79,16 @@ func_call: output_call | write_call | user_func_call;
 
 input_call: INPUT LPAREN RPAREN;
 
-output_call: OUTPUT LPAREN arith_expr RPAREN;
+output_call: OUTPUT LPAREN arith_expr RPAREN
+				{
+					$$ = novoNodo( OUTPUT_NODE );
+					adicionaFilho( $$, 1, $3 );
+				};
 
-write_call: WRITE LPAREN STRING RPAREN;
+write_call: WRITE LPAREN STRING RPAREN
+				{ 
+					$$ = novoNodo( WRITE_NODE );
+				};
 
 user_func_call: ID LPAREN opt_arg_list RPAREN;
 
