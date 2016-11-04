@@ -14,6 +14,7 @@
 
 %{
 #include <stdio.h>
+#include "Arvore.h"
 
 int yylex(void);
 void yyerror(char const *s);
@@ -90,9 +91,71 @@ arg_list: arg_list COMMA arith_expr | arith_expr;
 
 bool_expr: arith_expr bool_op arith_expr;
 
-bool_op: LT | LE | GT | GE | EQ | NEQ;
+bool_op: LT
+			{
+				$$ = novoNodo( LT_NODE );
+			}
+			| LE
+			{
+				$$ = novoNodo( LE_NODE );
+			}
+			| GT
+			{
+				$$ = novoNodo( GT_NODE );
+			}
+			| GE
+			{
+				$$ = novoNodo( GE_NODE );
+			}
+			
+			| EQ
+			{
+				$$ = novoNodo( EQ_NODE );
+			}
+			| NEQ { $$ = novoNodo( NEQ_NODE ); };
 
-arith_expr: arith_expr PLUS arith_expr | arith_expr MINUS arith_expr | arith_expr TIMES arith_expr | arith_expr OVER arith_expr | LPAREN arith_expr RPAREN | lval | input_call | user_func_call | NUM;
+arith_expr: arith_expr PLUS arith_expr
+				{
+					$$ = novoNodo( PLUS_NODE );
+					adicionaFilho( $$, 2, $1, $3 );
+					//adicionaFilho( $$, $1, 0 );
+					//adicionaFilho( $$, $3, 1 );
+				}
+ 				| arith_expr MINUS arith_expr
+				{
+					$$ = novoNodo( MINUS_NODE );
+					adicionaFilho( $$, 2, $1, $3 );
+				}
+ 				| arith_expr TIMES arith_expr
+				{
+					$$ = novoNodo( TIMES_NODE );
+					adicionaFilho( $$, 2, $1, $3 );
+				}
+				| arith_expr OVER arith_expr
+				{
+					$$ = novoNodo( OVER_NODE );
+					adicionaFilho( $$, 2, $1, $3 );
+				}
+				| LPAREN arith_expr RPAREN
+				{
+					$$ = $2;
+				}
+				| lval
+				{
+					$$ = $1;
+				}
+				| input_call
+				{
+					$$ = $1;
+				}
+				
+				| user_func_call
+				{
+					$$ = $1;
+				}
+				| NUM { $$ = novoNodo( NUMBER_NODE ); };
+							
+				
 
 %%
 

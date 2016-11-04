@@ -6,6 +6,12 @@ typedef struct treeNode TreeNode;
 typedef enum
 {
 	NUMBER_NODE,
+	LT_NODE,
+	LE_NODE,
+	GT_NODE,
+	GE_NODE,
+	EQ_NODE,
+	NEQ_NODE,
 	PLUS_NODE,
 	MINUS_NODE,
 	TIMES_NODE,
@@ -14,7 +20,9 @@ typedef enum
 
 TreeNode *novoNodo( NodeKind kind );
 
-void adicionaFilho( TreeNode *pai, TreeNode *filho, int posicao );
+void adicionaFilhoPrototipo( TreeNode *pai, TreeNode *filho, int posicao );
+
+void adicionaFilho( TreeNode *pai, int tamanho, ... );
 
 
 

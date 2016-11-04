@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdarg.h>
 #include "Arvore.h"
 
 #define MAXCHILDREN 7
@@ -34,7 +35,7 @@ TreeNode *novoNodo( NodeKind kind )
 }
 
 
-void adicionaFilho( TreeNode *pai, TreeNode *filho, int posicao )
+void adicionaFilhoPrototipo( TreeNode *pai, TreeNode *filho, int posicao )
 {
 	if ( posicao >= MAXCHIDREN )
 	{
@@ -42,4 +43,25 @@ void adicionaFilho( TreeNode *pai, TreeNode *filho, int posicao )
 	}
 
 	pai->filhoPtr[ posicao ] = filho;
+}
+
+void adicionaFilho( TreeNode *pai, int tamanho, ... )
+{
+	if ( tamanho >= MAXCHIDREN )
+	{
+		fprintf( stderr, "Estouro do indice máximo de filhos. O valor máximo é %d, enquanto o indice é %d\n", MAXCHILDREN, posicao );
+	}
+
+	int i;
+	va_list ap;
+
+	va_start( ap, i );
+	
+	for ( i = 0; i < tamanho; i++ )
+	{
+		pai->filhosPtr[ i ] = va_arg( ap, TreeNode * );
+	}
+
+	va_end( ap );
+
 }
