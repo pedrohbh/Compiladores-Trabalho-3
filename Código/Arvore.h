@@ -6,8 +6,11 @@ typedef struct treeNode TreeNode;
 typedef enum
 {
 	NUMBER_NODE,
+	STRING_NODE,
+	INPUT_NODE,
 	OUTPUT_NODE,
 	WRITE_NODE,
+	RETURN_NODE,
 	LT_NODE,
 	LE_NODE,
 	GT_NODE,

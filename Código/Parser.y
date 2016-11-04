@@ -73,11 +73,33 @@ block: LBRACE opt_stmt_list RBRACE;
 
 while_stmt: WHILE LPAREN bool_expr RPAREN block;
 
-return_stmt: RETURN SEMI | RETURN arith_expr SEMI;
+return_stmt: RETURN SEMI
+				{
+					$$ = novoNodo( RETURN_NODE );
+				}
+				| RETURN arith_expr SEMI
+				{
+					$$ = novoNodo( RETURN_NODE );
+					adicionaFilho( $$, 1, $2 );
+				};
 
-func_call: output_call | write_call | user_func_call;
+func_call: output_call
+				{
+					$$ = $1;
+				}
+				| write_call
+				{
+					$$ = $1;
+				}
+				| user_func_call
+				{
+					$$ = $1;
+				};
 
-input_call: INPUT LPAREN RPAREN;
+input_call: INPUT LPAREN RPAREN
+				{
+					$$ = novoNodo( INPUT_NODE );
+				};
 
 output_call: OUTPUT LPAREN arith_expr RPAREN
 				{
@@ -88,6 +110,7 @@ output_call: OUTPUT LPAREN arith_expr RPAREN
 write_call: WRITE LPAREN STRING RPAREN
 				{ 
 					$$ = novoNodo( WRITE_NODE );
+					adicionaFilho( $$, 1, novoNodo( STRING_NODE ) );
 				};
 
 user_func_call: ID LPAREN opt_arg_list RPAREN;
