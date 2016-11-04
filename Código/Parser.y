@@ -20,6 +20,8 @@ int yylex(void);
 void yyerror(char const *s);
 
 extern int yylineno;
+
+TreeNode *arvore;
 %}
 
 %token IF ELSE INPUT INT OUTPUT RETURN VOID WHILE WRITE
@@ -33,29 +35,68 @@ extern int yylineno;
 
 %%
 
-program: func_decl_list;
+program: func_decl_list { arvore = $1; };
 
-func_decl_list: func_decl_list func_decl | func_decl;
+func_decl_list: func_decl_list func_decl
+					{
+						$$ = novoNodo( FUNC_DECL_LIST );
+						adicionaFilho( $$, 2, $1, $2 );
+					}
+					| func_decl
+					{
+						$$ = $1;
+					};
 
-func_decl: func_header func_body;
+func_decl: func_header func_body
+				{
+					$$ = novoNodo( FUNC_DECL_NODE );
+					adicionaFilho( $$, 2, $1, $2 );
+				}
 
-func_header: ret_type ID LPAREN params RPAREN;
+func_header: ret_type ID LPAREN params RPAREN
+				{
+					$$ = novoNodo( FUNC_HEADER );
+					adicionaFilho( $$, 2, $1, $4 );
+				};
 
-func_body: LBRACE opt_var_decl opt_stmt_list RBRACE;
+func_body: LBRACE opt_var_decl opt_stmt_list RBRACE
+				{
+					$$ = novoNodo( FUNC_BODY_NODE );
+					adicionaFilho( $$, 2, $2, $3 );
+				};
 
-opt_var_decl: /* VAZIO */ | var_decl_list;
+opt_var_decl: /* VAZIO */ | var_decl_list { $$ = $1 };
 
-opt_stmt_list: /* VAZIO */ | stmt_list;
+opt_stmt_list: /* VAZIO */ | stmt_list { $$ = $1 };
 
 ret_type: INT | VOID;
 
-params: VOID | param_list;
+params: VOID
+			{
+				$$ = novoNodo( VOID_NODE );
+			}
+			| param_list
+			{
+				$$ = $1;
+			};
 
-param_list: param_list COMMA param | param;
+param_list: param_list COMMA param
+				{
+					$$ = novoNodo( PARAM_LIST_NODE );
+					adicionaFilho( $$, 2, $1, $3 );
+				}
+				| param
+				{
+					$$ = $1;
+				};
 
 param: INT ID | INT ID LBRACK RBRACK;
 
-var_decl_list: var_decl_list var_decl 
+var_decl_list: var_decl_list var_decl
+					{
+						$$ = novoNodo( VAR_DECL_LIST_NODE );
+						adicionaFilho( $$, 2, $1, $2 );
+					}
 					| var_decl
 					{
 						$$ = $1;
