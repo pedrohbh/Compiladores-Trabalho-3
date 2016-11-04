@@ -9,6 +9,7 @@ extern int yylineno;
 struct treeNode
 {
 	NodeKind kind;
+	//struct treeNode *irmaosPtr;
 	struct treeNode *filhosPtr[ 7 ];
 	int lineno;
 };

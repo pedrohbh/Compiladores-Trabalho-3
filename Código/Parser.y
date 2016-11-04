@@ -55,23 +55,90 @@ param_list: param_list COMMA param | param;
 
 param: INT ID | INT ID LBRACK RBRACK;
 
-var_decl_list: var_decl_list var_decl | var_decl;
+var_decl_list: var_decl_list var_decl 
+					| var_decl
+					{
+						$$ = $1;
+					};
 
-var_decl: INT ID SEMI | INT ID LBRACK NUM RBRACK SEMI;
+var_decl: INT ID SEMI
+			{
+				$$ = novoNodo( INTEGER_NODE );				
+			}
+			| INT ID LBRACK NUM RBRACK SEMI
+			{
+				$$ = novoNodo( INTEGER_NODE );
+			};
 
-stmt_list: stmt_list stmt | stmt;
+stmt_list: stmt_list stmt
+			{
+				// VOLTE AQUI
+			}
+			| stmt
+			{
+				$$ = $1;
+			};
 
-stmt: assign_stmt | if_stmt | while_stmt | return_stmt | func_call SEMI;
+stmt: assign_stmt
+		{
+			$$ = $1;
+		}
+		| if_stmt
+		{
+			$$ = $1;
+		}
+		| while_stmt
+		{
+			$$ = $1;
+		}
+		| return_stmt
+		{
+			$$ = $1;
+		}
+		| func_call SEMI
+		{
+			$$ = $1;
+		};
 
-assign_stmt: lval ASSIGN arith_expr SEMI;
+assign_stmt: lval ASSIGN arith_expr SEMI
+				{
+					$$ = novoNodo( ASSIGN_NODE );
+					adicionaFilho( $$, 2, $1, $3 );					
+				};
 
-lval: ID | ID LBRACK NUM RBRACK | ID LBRACK ID RBRACK;
+lval: ID
+		{
+			$$ = novoNodo( LVAL_NODE );
+		}
+		| ID LBRACK NUM RBRACK
+		{
+			$$ = novoNodo( LVAL_NODE );
+			adicionaFilho( $$, 1, novoNodo( NUMBER_NODE ) );
+		}
+		| ID LBRACK ID RBRACK;
 
-if_stmt: IF LPAREN bool_expr RPAREN block | IF LPAREN bool_expr RPAREN block ELSE block;
+if_stmt: IF LPAREN bool_expr RPAREN block
+			{
+				$$ = adicionaNodo( IF_NODE );
+				adicionaFilho( $$, 2, $3, $5 );
+			}
+			| IF LPAREN bool_expr RPAREN block ELSE block
+			{
+				$$ = adicionaNodo( IF_NODE );
+				adicionaFilho( $$, 3, $3, $5, $7 );
+			};
 
-block: LBRACE opt_stmt_list RBRACE;
+block: LBRACE opt_stmt_list RBRACE
+		{
+			$$ = novoNodo( BLOCK_NODE );
+			adicionaFilho( $$, 1, $2 );
+		};
 
-while_stmt: WHILE LPAREN bool_expr RPAREN block;
+while_stmt: WHILE LPAREN bool_expr RPAREN block
+				{ 
+					$$ = novoNodo( WHILE_NODE );
+					adicionaFilho( $$, 2, $3, $5 );
+				};
 
 return_stmt: RETURN SEMI
 				{
