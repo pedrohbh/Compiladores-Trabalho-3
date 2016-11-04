@@ -29,7 +29,7 @@ TreeNode *novoNodo( NodeKind kind )
 			t->filhosPtr[ i ] = NULL;
 		
 		t->kind = kind;
-		t->lineno = lineno;
+		t->lineno = yylineno;
 	}
 
 	return t;
@@ -40,7 +40,7 @@ void adicionaFilhoPrototipo( TreeNode *pai, TreeNode *filho, int posicao )
 {
 	if ( posicao >= MAXCHIDREN )
 	{
-		fprintf( stderr, "Estouro do indice máximo de filhos. O valor máximo é %d, enquanto o indice é %d\n", MAXCHILDREN, posicao );
+		fprintf( stderr, "Estouro do indice máximo de filhos. O valor máximo é %d, enquanto o indice solicitado é %d\n", MAXCHILDREN, posicao );
 	}
 
 	pai->filhoPtr[ posicao ] = filho;
