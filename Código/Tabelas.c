@@ -14,7 +14,7 @@ struct linhaLista
 struct tabelaSimbolos
 {
 	char *nome;
-	int tamanho;
+	//int tamanho;
 	LinhaLista *linhas;
 	struct tabelaSimbolos *proximoPtr;
 };
@@ -60,6 +60,9 @@ void insereTabelaSimbolos( TabelaSimbolos *tb, char *nome, int linha )
 	}
 
 	novoElemento->nome = copiaString( nome );
+	novoElemento->linhas = NULL;
+	novoElemento->proximoPtr = NULL;
+	insereNovaLinha( novoElemento, linha );
 }
 
 char *copiaString( char *string )

@@ -15,6 +15,7 @@
 %{
 #include <stdio.h>
 #include "Arvore.h"
+//#include "Tabelas.h"
 
 int yylex(void);
 void yyerror(char const *s);
@@ -23,6 +24,8 @@ extern int yylineno;
 
 TreeNode *arvore;
 %}
+
+%define api.value.type {TreeNode*} // Type of variable yylval;
 
 %token IF ELSE INPUT INT OUTPUT RETURN VOID WHILE WRITE
 %token PLUS MINUS TIMES OVER
@@ -51,11 +54,11 @@ func_decl: func_header func_body
 				{
 					$$ = novoNodo( FUNC_DECL_NODE );
 					adicionaFilho( $$, 2, $1, $2 );
-				}
+				};
 
 func_header: ret_type ID LPAREN params RPAREN
 				{
-					$$ = novoNodo( FUNC_HEADER );
+					$$ = novoNodo( FUNC_HEADER_NODE );
 					adicionaFilho( $$, 2, $1, $4 );
 				};
 
@@ -69,7 +72,7 @@ opt_var_decl: /* VAZIO */ | var_decl_list { $$ = $1 };
 
 opt_stmt_list: /* VAZIO */ | stmt_list { $$ = $1 };
 
-ret_type: INT | VOID;
+ret_type: INT { $$ = novoNodo( INTEGER_NODE ); } | VOID { $$ = novoNodo( VOID_NODE ); };
 
 params: VOID
 			{
@@ -90,7 +93,14 @@ param_list: param_list COMMA param
 					$$ = $1;
 				};
 
-param: INT ID | INT ID LBRACK RBRACK;
+param: INT ID
+		{
+			$$ = novoNodo( INTEGER_NODE );
+		}
+		| INT ID LBRACK RBRACK
+		{
+			$$ = novoNodo( INTEGER_NODE );
+		};
 
 var_decl_list: var_decl_list var_decl
 					{
@@ -113,6 +123,8 @@ var_decl: INT ID SEMI
 
 stmt_list: stmt_list stmt
 			{
+				$$ = novoNodo( STMT_LIST_NODE );
+				adicionaFilho( $$, 2, $1, $2 );
 				// VOLTE AQUI
 			}
 			| stmt
@@ -149,12 +161,13 @@ assign_stmt: lval ASSIGN arith_expr SEMI
 
 lval: ID
 		{
-			$$ = novoNodo( LVAL_NODE );
+			//$$ = novoNodo( LVAL_NODE );
 		}
 		| ID LBRACK NUM RBRACK
 		{
-			$$ = novoNodo( LVAL_NODE );
-			adicionaFilho( $$, 1, novoNodo( NUMBER_NODE ) );
+			$$ = novoNodo( NUMBER_NODE );
+			//$$ = novoNodo( LVAL_NODE );
+			//adicionaFilho( $$, 1, novoNodo( NUMBER_NODE ) );
 		}
 		| ID LBRACK ID RBRACK;
 
@@ -221,13 +234,28 @@ write_call: WRITE LPAREN STRING RPAREN
 					adicionaFilho( $$, 1, novoNodo( STRING_NODE ) );
 				};
 
-user_func_call: ID LPAREN opt_arg_list RPAREN;
+user_func_call: ID LPAREN opt_arg_list RPAREN
+					{
+						$$ = $3;
+					};
 
-opt_arg_list: /* VAZIO */ | arg_list;
+opt_arg_list: /* VAZIO */ | arg_list { $$ = $1; };
 
-arg_list: arg_list COMMA arith_expr | arith_expr;
+arg_list: arg_list COMMA arith_expr 
+			{
+				$$ = novoNodo( ARG_LIST_NODE );
+				adicionaFilho( $$, 2, $1, $3 );
+			}
+			| arith_expr
+			{
+				$$ = $1;
+			};
 
-bool_expr: arith_expr bool_op arith_expr;
+bool_expr: arith_expr bool_op arith_expr
+				{
+					$$ = novoNodo( BOOL_EXPR_NODE );
+					adicionaFilho( $$, 3, $1, $2, $3 );
+				};
 
 bool_op: LT
 			{
