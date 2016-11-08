@@ -1,6 +1,8 @@
 #ifndef ARVORE_H
 #define ARVORE_H
 
+struct treeNode;
+
 typedef struct treeNode TreeNode;
 
 typedef enum

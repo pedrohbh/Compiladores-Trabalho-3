@@ -334,7 +334,10 @@ int main()
 {
 	int resultado = yyparse();
 	if ( resultado == 0 )
+	{
 		printf("PARSE SUCESSFUL!\n");
+		//print_dot( arvore );
+	}
 
 	return 0;
 }
