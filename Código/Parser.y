@@ -161,7 +161,7 @@ assign_stmt: lval ASSIGN arith_expr SEMI
 
 lval: ID
 		{
-			//$$ = novoNodo( LVAL_NODE );
+			//$$ = novoNodo( LVAL_NODE ); Pode Dar problema aqui
 		}
 		| ID LBRACK NUM RBRACK
 		{

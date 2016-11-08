@@ -93,6 +93,17 @@ void node2str(TreeNode *node, char *s)
 		case GE_NODE: sprintf( s, "%s", ">=" ); break;
 		case EQ_NODE: sprintf( s, "%s", "==" ); break;
 		case NEQ_NODE: sprintf( s, "%s", "!=" ); break;
+		case VOID_NODE: sprintf( s, "%s", "void" ); break;
+		case INTEGER_NODE: sprintf( s, "%s", "int" ); break;
+		case BOOL_EXPR_NODE: sprintf( s, "%s", "Bool Expression" ); break;
+		case ARG_LIST_NODE: sprintf( s, "%s", "Arg List" ); break;
+		case STMT_LIST_NODE: sprintf( s, "%s", "Stmt List" ); break;
+		case VAR_DECL_LIST_NODE: sprintf( s, "%s", "Var Decl List" ); break;
+		case PARAM_LIST_NODE: sprintf( s, "%s", "Param List" ); break;
+		case FUNC_BODY_NODE: sprintf( s, "%s", "Func Body" ); break;
+		case FUNC_HEADER_NODE: sprintf( s, "%s", "Func Header" ); break;
+		case FUNC_DECL_NODE: sprintf( s, "%s", "Func Decl" ); break;
+		case FUNC_DECL_LIST: sprintf( s, "%s", "Func Decl List" ); break;
 		default: printf("Invalid node kind: %d!\n", node->kind);
     }
 }
