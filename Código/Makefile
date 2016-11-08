@@ -7,8 +7,8 @@ bison: Parser.y
 flex: Scanner.l
 	flex Scanner.l
 
-gcc: Scanner.c Parser.c
-	gcc -Wall -o trab2 Scanner.c Parser.c -ly
+gcc: Scanner.c Parser.c Arvore.c
+	gcc -Wall -o trab3 Scanner.c Parser.c Arvore.c -ly
 
 clean:
-	@rm -f *.o Scanner.c Parser.h Parser.c trab2
+	@rm -f *.o Scanner.c Parser.h Parser.c trab3
