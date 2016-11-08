@@ -31,6 +31,10 @@ void adicionaFilhoPrototipo( TreeNode *pai, TreeNode *filho, int posicao );
 
 void adicionaFilho( TreeNode *pai, int tamanho, ... );
 
+void node2str(TreeNode *node, char *s);
 
+int print_node_dot(TreeNode *node);
+
+void print_dot(TreeNode *tree);
 
 #endif

@@ -38,7 +38,7 @@ TreeNode *novoNodo( NodeKind kind )
 
 void adicionaFilhoPrototipo( TreeNode *pai, TreeNode *filho, int posicao )
 {
-	if ( posicao >= MAXCHIDREN )
+	if ( posicao >= MAXCHILDREN )
 	{
 		fprintf( stderr, "Estouro do indice máximo de filhos. O valor máximo é %d, enquanto o indice solicitado é %d\n", MAXCHILDREN, posicao );
 	}
@@ -56,7 +56,7 @@ void adicionaFilho( TreeNode *pai, int tamanho, ... )
 	int i;
 	va_list ap;
 
-	va_start( ap, i );
+	va_start( ap, tamanho );
 	
 	for ( i = 0; i < tamanho; i++ )
 	{
@@ -65,4 +65,58 @@ void adicionaFilho( TreeNode *pai, int tamanho, ... )
 
 	va_end( ap );
 
+}
+
+
+// Dot Output
+int nr;
+
+void node2str(TreeNode *node, char *s) 
+{
+    switch(node->kind)
+	 {
+		case NUMBER_NODE: sprintf(s, "%s", "Numero"); break;
+		case PLUS_NODE:   sprintf(s, "%s", "+"); break;
+		case MINUS_NODE:  sprintf(s, "%s", "-"); break;
+		case TIMES_NODE:  sprintf(s, "%s", "*"); break;
+		case OVER_NODE:   sprintf(s, "%s", "/"); break;
+		case STRING_NODE: sprintf( s, "%s", "String"); break;
+		case BLOCK_NODE: sprintf( s, "%s", "Block"); break;
+		case INPUT_NODE: sprintf( s, "%s", "Input"); break;
+		case OUTPUT_NODE: sprintf( s, "%s", "Output" ); break;
+		case WRITE_NODE: sprintf( s, "%s", "Write" ); break;
+		case RETURN_NODE: sprintf( s, "%s", "Return" ); break;
+		case IF_NODE: sprintf( s, "%s", "IF NODE"); break;
+		case LT_NODE: sprintf( s, "%s", "<" ); break;
+		case LE_NODE: sprintf( s, "%s", "<=" ); break;
+		case GT_NODE: sprintf( s, "%s", ">" ); break;
+		case GE_NODE: sprintf( s, "%s", ">=" ); break;
+		case EQ_NODE: sprintf( s, "%s", "==" ); break;
+		case NEQ_NODE: sprintf( s, "%s", "!=" ); break;
+		default: printf("Invalid node kind: %d!\n", node->kind);
+    }
+}
+
+
+int print_node_dot(TreeNode *node) {
+	int my_nr = nr++;
+	int i;
+	char s[ 15 ];
+	node2str( node, s );
+    printf("node%d[label=\"%s\"];\n", my_nr, node->kind);
+    for ( i = 0; i < MAXCHILDREN; i++)
+ 	{
+		if ( node->filhosPtr[ i ] == NULL )
+			break;
+        int child_nr = print_node_dot(node->filhosPtr[i]);
+        printf("node%d -> node%d;\n", my_nr, child_nr);
+    }
+    return my_nr;
+}
+
+void print_dot(TreeNode *tree) {
+    nr = 0;
+    printf("digraph {\ngraph [ordering=\"out\"];\n");
+    print_node_dot(tree);
+    printf("}\n");
 }
