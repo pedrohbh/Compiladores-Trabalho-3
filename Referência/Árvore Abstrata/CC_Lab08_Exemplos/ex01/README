@@ -1,0 +1,18 @@
+
+$ make
+bison parser.y
+flex scanner.l
+gcc -Wall -o parser scanner.c parser.c bt.c -ly
+Done.
+
+$ ./parser <<< "2+3*4-5/6"
+AST of given expression:
+2: Node -- Addr: 0xe0a090 -- Kind: 0 -- Data: 2 -- Left: (nil) -- Right: (nil)
+1: Node -- Addr: 0xe0a110 -- Kind: 1 -- Data: 0 -- Left: 0xe0a090 -- Right: 0xe0a0f0
+3: Node -- Addr: 0xe0a0b0 -- Kind: 0 -- Data: 3 -- Left: (nil) -- Right: (nil)
+2: Node -- Addr: 0xe0a0f0 -- Kind: 3 -- Data: 0 -- Left: 0xe0a0b0 -- Right: 0xe0a0d0
+3: Node -- Addr: 0xe0a0d0 -- Kind: 0 -- Data: 4 -- Left: (nil) -- Right: (nil)
+0: Node -- Addr: 0xe0a190 -- Kind: 2 -- Data: 0 -- Left: 0xe0a110 -- Right: 0xe0a170
+2: Node -- Addr: 0xe0a130 -- Kind: 0 -- Data: 5 -- Left: (nil) -- Right: (nil)
+1: Node -- Addr: 0xe0a170 -- Kind: 4 -- Data: 0 -- Left: 0xe0a130 -- Right: 0xe0a150
+2: Node -- Addr: 0xe0a150 -- Kind: 0 -- Data: 6 -- Left: (nil) -- Right: (nil)
