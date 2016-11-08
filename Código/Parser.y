@@ -68,9 +68,9 @@ func_body: LBRACE opt_var_decl opt_stmt_list RBRACE
 					adicionaFilho( $$, 2, $2, $3 );
 				};
 
-opt_var_decl: /* VAZIO */ | var_decl_list { $$ = $1 };
+opt_var_decl: /* VAZIO */ | var_decl_list { $$ = $1; };
 
-opt_stmt_list: /* VAZIO */ | stmt_list { $$ = $1 };
+opt_stmt_list: /* VAZIO */ | stmt_list { $$ = $1; };
 
 ret_type: INT { $$ = novoNodo( INTEGER_NODE ); } | VOID { $$ = novoNodo( VOID_NODE ); };
 
@@ -173,12 +173,12 @@ lval: ID
 
 if_stmt: IF LPAREN bool_expr RPAREN block
 			{
-				$$ = adicionaNodo( IF_NODE );
+				$$ = novoNodo( IF_NODE );
 				adicionaFilho( $$, 2, $3, $5 );
 			}
 			| IF LPAREN bool_expr RPAREN block ELSE block
 			{
-				$$ = adicionaNodo( IF_NODE );
+				$$ = novoNodo( IF_NODE );
 				adicionaFilho( $$, 3, $3, $5, $7 );
 			};
 

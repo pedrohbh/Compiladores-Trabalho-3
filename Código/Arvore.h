@@ -13,6 +13,7 @@ typedef enum
 	WRITE_NODE,
 	WHILE_NODE,
 	RETURN_NODE,
+	ASSIGN_NODE,
 	IF_NODE,
 	LT_NODE,
 	LE_NODE,
@@ -39,7 +40,7 @@ typedef enum
 
 TreeNode *novoNodo( NodeKind kind );
 
-void adicionaFilhoPrototipo( TreeNode *pai, TreeNode *filho, int posicao );
+//void adicionaFilhoPrototipo( TreeNode *pai, TreeNode *filho, int posicao );
 
 void adicionaFilho( TreeNode *pai, int tamanho, ... );
 

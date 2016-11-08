@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdarg.h>
+#include <stdio.h>
 #include "Arvore.h"
 
 #define MAXCHILDREN 7
@@ -36,21 +37,21 @@ TreeNode *novoNodo( NodeKind kind )
 }
 
 
-void adicionaFilhoPrototipo( TreeNode *pai, TreeNode *filho, int posicao )
+/*void adicionaFilhoPrototipo( TreeNode *pai, TreeNode *filho, int posicao )
 {
 	if ( posicao >= MAXCHILDREN )
 	{
 		fprintf( stderr, "Estouro do indice máximo de filhos. O valor máximo é %d, enquanto o indice solicitado é %d\n", MAXCHILDREN, posicao );
 	}
 
-	pai->filhoPtr[ posicao ] = filho;
-}
+	pai->filhosPtr[ posicao ] = filho;
+}*/
 
 void adicionaFilho( TreeNode *pai, int tamanho, ... )
 {
-	if ( tamanho >= MAXCHIDREN )
+	if ( tamanho >= MAXCHILDREN )
 	{
-		fprintf( stderr, "Estouro do indice máximo de filhos. O valor máximo é %d, enquanto o indice é %d\n", MAXCHILDREN, posicao );
+		fprintf( stderr, "Estouro do indice máximo de filhos. O valor máximo é %d, enquanto o indice é %d\n", MAXCHILDREN, tamanho );
 	}
 
 	int i;
@@ -93,6 +94,7 @@ void node2str(TreeNode *node, char *s)
 		case GE_NODE: sprintf( s, "%s", ">=" ); break;
 		case EQ_NODE: sprintf( s, "%s", "==" ); break;
 		case NEQ_NODE: sprintf( s, "%s", "!=" ); break;
+		case ASSIGN_NODE: sprintf( s, "%s", "=" ); break;
 		case VOID_NODE: sprintf( s, "%s", "void" ); break;
 		case INTEGER_NODE: sprintf( s, "%s", "int" ); break;
 		case BOOL_EXPR_NODE: sprintf( s, "%s", "Bool Expression" ); break;
@@ -114,7 +116,7 @@ int print_node_dot(TreeNode *node) {
 	int i;
 	char s[ 15 ];
 	node2str( node, s );
-    printf("node%d[label=\"%s\"];\n", my_nr, node->kind);
+    printf("node%d[label=\"%s\"];\n", my_nr, s);
     for ( i = 0; i < MAXCHILDREN; i++)
  	{
 		if ( node->filhosPtr[ i ] == NULL )
