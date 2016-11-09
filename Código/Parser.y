@@ -25,8 +25,12 @@
 
 int yylex(void);
 void yyerror(char const *s);
+
 TabelaSimbolos *newVar( TabelaSimbolos *tb,  char *nome );
 void check_var(TabelaSimbolos *tb, char *nome );
+
+TabelaFuncao *novaFuncao( TabelaFuncao *tb,  char *nome );
+void check_funcao( TabelaFuncao *tb, char *nome );
 
 extern int yylineno;
 
@@ -36,6 +40,7 @@ char *tokenSimbolo;
 char *tokenLiteral;
 
 TabelaSimbolos *tabelaSimbolos;
+TabelaFuncao *tabelaFuncao;
 
 TreeNode *arvore;
 %}
@@ -360,6 +365,38 @@ arith_expr: arith_expr PLUS arith_expr
 				
 
 %%
+
+TabelaFuncao *novaFuncao( TabelaFuncao *tb,  char *nome )
+{
+	int idx = buscaTabelaFuncao( tb, nome );
+	
+	if ( idx != -1 )
+	{
+		printf("SEMANTIC ERROR (%d): function ’%s’ already declared at line %d.\n", yylineno, nome, getPrimeiraLinhaFuncao( tb, nome ) );
+		exit( 1 );
+	}
+
+	tb = insereTabelaFuncao( tb, nome,  yylineno );
+
+	return tb;
+
+}
+
+/*void check_var(TabelaSimbolos *tb, char *nome ) 
+{
+    int idx = buscaTabelaSimbolos( tb, nome );
+
+    if (idx == -1) {
+        printf("SEMANTIC ERROR (%d): variable '%s' was not declared.\n", yylineno, nome);
+        exit(1);
+    }
+
+	TabelaSimbolos *it = getNodo( tb, nome );
+	insereNovaLinha( it, yylineno );
+
+	
+}*/
+
 
 TabelaSimbolos *newVar( TabelaSimbolos *tb,  char *nome )
 {
