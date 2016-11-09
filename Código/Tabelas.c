@@ -20,6 +20,12 @@ struct tabelaSimbolos
 };
 
 
+/*TabelaSimbolos *criaTabelaSimbolos()
+{
+	TabelaSimbolos novaTabela = (TabelaSimbolos *)malloc(sizeof(TabelaSimbolos));
+*/	
+
+
 int buscaTabelaSimbolos( TabelaSimbolos *tb, char *nome )
 {
 	TabelaSimbolos *it;
@@ -81,6 +87,15 @@ void insereTabelaSimbolos( TabelaSimbolos *tb, char *nome, int linha )
 	novoElemento->linhas = NULL;
 	novoElemento->proximoPtr = NULL;
 	insereNovaLinha( novoElemento, linha );
+
+
+	if ( tb == NULL )
+		tb = novoElemento;
+	else
+	{
+		novoElemento->proximoPtr = tb;
+		tb = novoElemento;
+	}
 }
 
 char *copiaString( char *string )

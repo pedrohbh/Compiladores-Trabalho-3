@@ -28,6 +28,9 @@ void yyerror(char const *s);
 
 extern int yylineno;
 
+
+TabelaSimbolos *tabelaSimbolos;
+
 TreeNode *arvore;
 %}
 
