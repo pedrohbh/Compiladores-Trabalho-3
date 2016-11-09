@@ -12,9 +12,15 @@
 // Enable the trace option so that debugging is possible.
 %define parse.trace
 
+%code requires{
+#include "Arvore.h"
+}
+
+
 %{
 #include <stdio.h>
-#include "Arvore.h"
+#include "Parser.h"
+//#include "Arvore.h"
 //#include "Tabelas.h"
 
 int yylex(void);
