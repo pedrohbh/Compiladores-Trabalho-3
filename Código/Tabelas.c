@@ -42,6 +42,18 @@ int buscaTabelaSimbolos( TabelaSimbolos *tb, char *nome )
 	return -1;
 }
 
+TabelaSimbolos *getNodo( TabelaSimbolos *tb, char *nome )
+{
+	TabelaSimbolos *it;
+	for ( it = tb; it != NULL; it = it->proximoPtr )
+	{
+		if ( strcmp( nome, it->nome ) == 0 )
+			return it;
+	}
+
+	return NULL;
+}
+
 int getPrimeiraLinhaSimbolo( TabelaSimbolos *tb, char *nome )
 {
 	TabelaSimbolos *it;
@@ -96,6 +108,7 @@ TabelaSimbolos *insereTabelaSimbolos( TabelaSimbolos *tb, char *nome, int linha 
 	}
 
 	novoElemento->nome = copiaString( nome );
+	printf("Nome %s\n", novoElemento->nome );
 	novoElemento->linhas = NULL;
 	novoElemento->proximoPtr = NULL;
 	insereNovaLinha( novoElemento, linha );
@@ -134,4 +147,21 @@ char *copiaString( char *string )
 		strcpy( t, string );
 	
 	return t;
+}
+
+
+void imprimeTabelaSimbolos( TabelaSimbolos *tb )
+{
+	TabelaSimbolos *it;
+	int i = 0;
+	for ( it = tb; it != NULL; it = it->proximoPtr )
+		i++;
+	printf("i = %d\n", i );
+	for ( it = tb; it != NULL; it = it->proximoPtr )
+	{
+		printf("Simbolo: %s -------------------- ", it->nome );
+		/*for ( ll = it->linhas; ll != NULL; ll = ll->proximoPtr );
+			printf("%d ", ll->linha );*/
+		printf("\n\n");
+	}
 }

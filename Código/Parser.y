@@ -22,12 +22,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Parser.h"
-//#include "Arvore.h"
-//#include "Tabelas.h"
 
 int yylex(void);
 void yyerror(char const *s);
 TabelaSimbolos *newVar( TabelaSimbolos *tb,  char *nome );
+void check_var(TabelaSimbolos *tb, char *nome );
 
 extern int yylineno;
 
@@ -119,6 +118,8 @@ param: INT ID
 		| INT ID LBRACK RBRACK
 		{
 			$$ = novoNodo( INTEGER_NODE );
+			tabelaSimbolos = newVar( tabelaSimbolos, tokenSimbolo );
+			free( tokenSimbolo );
 		};
 
 var_decl_list: var_decl_list var_decl
@@ -135,11 +136,15 @@ var_decl: INT ID SEMI
 			{
 				$$ = novoNodo( INTEGER_NODE );
 				tabelaSimbolos = newVar( tabelaSimbolos, tokenSimbolo );
+				//imprimeTabelaSimbolos( tabelaSimbolos );
+				free( tokenSimbolo );
 				//printf("O valor do simbolo é: %s\n", tokenSimbolo );				
 			}
 			| INT ID LBRACK NUM RBRACK SEMI
 			{
 				$$ = novoNodo( INTEGER_NODE );
+				tabelaSimbolos = newVar( tabelaSimbolos, tokenSimbolo );
+				free( tokenSimbolo );
 			};
 
 stmt_list: stmt_list stmt
@@ -182,15 +187,23 @@ assign_stmt: lval ASSIGN arith_expr SEMI
 
 lval: ID
 		{
+			check_var( tabelaSimbolos, tokenSimbolo );
+			free( tokenSimbolo );
 			//$$ = novoNodo( LVAL_NODE ); Pode Dar problema aqui
 		}
 		| ID LBRACK NUM RBRACK
 		{
 			$$ = novoNodo( NUMBER_NODE );
+			check_var( tabelaSimbolos, tokenSimbolo );
+			free( tokenSimbolo );
 			//$$ = novoNodo( LVAL_NODE );
 			//adicionaFilho( $$, 1, novoNodo( NUMBER_NODE ) );
 		}
-		| ID LBRACK ID RBRACK;
+		| ID LBRACK ID RBRACK
+		{
+			//check_var( tabelaSimbolos. tokenSimbolo );
+			//free( tokenSimbolo );
+		};
 
 if_stmt: IF LPAREN bool_expr RPAREN block
 			{
@@ -364,6 +377,21 @@ TabelaSimbolos *newVar( TabelaSimbolos *tb,  char *nome )
 
 }
 
+void check_var(TabelaSimbolos *tb, char *nome ) 
+{
+    int idx = buscaTabelaSimbolos( tb, nome );
+
+    if (idx == -1) {
+        printf("SEMANTIC ERROR (%d): variable '%s' was not declared.\n", yylineno, nome);
+        exit(1);
+    }
+
+	TabelaSimbolos *it = getNodo( tb, nome );
+	insereNovaLinha( it, yylineno );
+
+	
+}
+
 void yyerror( char const *s )
 {
 	printf("PARSE ERROR (%d): %s\n", yylineno, s);
@@ -375,6 +403,7 @@ int main()
 	if ( resultado == 0 )
 	{
 		printf("PARSE SUCESSFUL!\n");
+		imprimeTabelaSimbolos( tabelaSimbolos );
 		//print_dot( arvore );
 	}
 
