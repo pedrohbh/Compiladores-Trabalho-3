@@ -12,7 +12,7 @@
 extern char *tokenSimbolo;
 extern char *tokenLiteral;
 
-//void process_id();
+void process_id();
 %}
 
 digito [0-9]
@@ -62,15 +62,15 @@ whitespace [ \t]+
 "//"[^\n]* { /* FAZ NADA */ }
 "\""[^"\""]*"\"" { return STRING; }
 {numero} { return NUM; }
-{identificador} { int len = strlen( yytext ) + 1; tokenSimbolo = (char *)malloc(sizeof(char) * len); if ( tokenSimbolo == NULL ) { printf("Erro ao alocar tokenSImbolo\n"); exit( 1 ); } strcpy(tokenSimbolo, yytext );  return ID; }
+{identificador} {  int len = strlen( yytext ) + 1; tokenSimbolo = (char *)malloc(sizeof(char) * len); if ( tokenSimbolo == NULL ) { printf("Erro ao alocar tokenSimbolo\n"); exit( 1 ); } strcpy(tokenSimbolo, yytext ); /*printf("ID = %s   ---->  %s\n", yytext, tokenSimbolo );*/ return ID; }
 {newline} { yylineno++; }
 {whitespace} { /* FAZ NADA */ }
 . { printf("SCANNING ERROR (%d): Unknown symbol %s\n", yylineno, yytext ); exit( 1 ); }
 
 %%
 
-/*void process_id()
+void process_id()
 {
 
-}*/
+}
 

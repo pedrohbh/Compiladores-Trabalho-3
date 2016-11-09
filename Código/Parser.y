@@ -39,8 +39,10 @@ extern char *yytext;
 char *tokenSimbolo;
 char *tokenLiteral;
 
-TabelaSimbolos *tabelaSimbolos;
-TabelaFuncao *tabelaFuncao;
+TabelaSimbolos *tabelaSimbolos = NULL;
+TabelaFuncao *tabelaFuncao = NULL;
+TabelaSimbolos *auxiliarSimbolos;
+TabelaSimbolos *auxiliarFuncao = NULL;
 
 TreeNode *arvore;
 %}
@@ -80,6 +82,9 @@ func_header: ret_type ID LPAREN params RPAREN
 				{
 					$$ = novoNodo( FUNC_HEADER_NODE );
 					adicionaFilho( $$, 2, $1, $4 );
+					//printf("Nome função: %s\n", tokenSimbolo );
+					tabelaFuncao = novaFuncao( tabelaFuncao, tokenSimbolo );
+					//free( tokenSimbolo );
 				};
 
 func_body: LBRACE opt_var_decl opt_stmt_list RBRACE
@@ -117,14 +122,15 @@ param: INT ID
 		{
 			$$ = novoNodo( INTEGER_NODE );
 			tabelaSimbolos = newVar( tabelaSimbolos, tokenSimbolo );
-			free( tokenSimbolo );
+			printf("VAR: %s\n", tokenSimbolo );
+			//free( tokenSimbolo );
 			//printf("O valor do simbolo é: %s\n", tokenSimbolo );
 		}
 		| INT ID LBRACK RBRACK
 		{
 			$$ = novoNodo( INTEGER_NODE );
 			tabelaSimbolos = newVar( tabelaSimbolos, tokenSimbolo );
-			free( tokenSimbolo );
+			//free( tokenSimbolo );
 		};
 
 var_decl_list: var_decl_list var_decl
@@ -140,23 +146,18 @@ var_decl_list: var_decl_list var_decl
 var_decl: INT ID SEMI
 			{
 				$$ = novoNodo( INTEGER_NODE );
-				tabelaSimbolos = newVar( tabelaSimbolos, tokenSimbolo );
-				//imprimeTabelaSimbolos( tabelaSimbolos );
-				free( tokenSimbolo );
-				//printf("O valor do simbolo é: %s\n", tokenSimbolo );				
+				tabelaSimbolos = newVar( tabelaSimbolos, tokenSimbolo );					
 			}
 			| INT ID LBRACK NUM RBRACK SEMI
 			{
 				$$ = novoNodo( INTEGER_NODE );
 				tabelaSimbolos = newVar( tabelaSimbolos, tokenSimbolo );
-				free( tokenSimbolo );
 			};
 
 stmt_list: stmt_list stmt
 			{
 				$$ = novoNodo( STMT_LIST_NODE );
 				adicionaFilho( $$, 2, $1, $2 );
-				// VOLTE AQUI
 			}
 			| stmt
 			{
@@ -193,14 +194,14 @@ assign_stmt: lval ASSIGN arith_expr SEMI
 lval: ID
 		{
 			check_var( tabelaSimbolos, tokenSimbolo );
-			free( tokenSimbolo );
+			//free( tokenSimbolo );
 			//$$ = novoNodo( LVAL_NODE ); Pode Dar problema aqui
 		}
 		| ID LBRACK NUM RBRACK
 		{
 			$$ = novoNodo( NUMBER_NODE );
 			check_var( tabelaSimbolos, tokenSimbolo );
-			free( tokenSimbolo );
+			//free( tokenSimbolo );
 			//$$ = novoNodo( LVAL_NODE );
 			//adicionaFilho( $$, 1, novoNodo( NUMBER_NODE ) );
 		}
@@ -275,9 +276,10 @@ write_call: WRITE LPAREN STRING RPAREN
 
 user_func_call: ID LPAREN opt_arg_list RPAREN
 					{
-						
-						//printf("ID = %s\n", yytext );
 						$$ = $3;
+						puts("1");
+						check_funcao( tabelaFuncao, tokenSimbolo );
+						//free( tokenSimbolo );
 					};
 
 opt_arg_list: /* VAZIO */ | arg_list { $$ = $1; };
@@ -325,8 +327,6 @@ arith_expr: arith_expr PLUS arith_expr
 				{
 					$$ = novoNodo( PLUS_NODE );
 					adicionaFilho( $$, 2, $1, $3 );
-					//adicionaFilho( $$, $1, 0 );
-					//adicionaFilho( $$, $3, 1 );
 				}
  				| arith_expr MINUS arith_expr
 				{
@@ -368,6 +368,7 @@ arith_expr: arith_expr PLUS arith_expr
 
 TabelaFuncao *novaFuncao( TabelaFuncao *tb,  char *nome )
 {
+	//printf("Nome: %s\n", nome );
 	int idx = buscaTabelaFuncao( tb, nome );
 	
 	if ( idx != -1 )
@@ -440,7 +441,7 @@ int main()
 	if ( resultado == 0 )
 	{
 		printf("PARSE SUCESSFUL!\n");
-		imprimeTabelaSimbolos( tabelaSimbolos );
+		//imprimeTabelaSimbolos( tabelaSimbolos );
 		//print_dot( arvore );
 	}
 

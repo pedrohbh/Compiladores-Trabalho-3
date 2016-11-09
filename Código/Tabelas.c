@@ -101,7 +101,7 @@ TabelaFuncao *insereTabelaFuncao( TabelaFuncao *tb, char *nome, int linha )
 	}
 
 	novoElemento->nome = copiaString( nome );
-	printf("Nome %s\n", novoElemento->nome );
+	//printf("Nome %s\n", novoElemento->nome );
 	novoElemento->linhas = NULL;
 	novoElemento->proximoPtr = NULL;
 	insereNovaLinhaFuncao( novoElemento, linha );
@@ -217,7 +217,7 @@ TabelaSimbolos *insereTabelaSimbolos( TabelaSimbolos *tb, char *nome, int linha 
 	}
 
 	novoElemento->nome = copiaString( nome );
-	printf("Nome %s\n", novoElemento->nome );
+	//printf("Nome %s\n", novoElemento->nome );
 	novoElemento->linhas = NULL;
 	novoElemento->proximoPtr = NULL;
 	insereNovaLinha( novoElemento, linha );
