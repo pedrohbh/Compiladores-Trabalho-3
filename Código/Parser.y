@@ -382,20 +382,20 @@ TabelaFuncao *novaFuncao( TabelaFuncao *tb,  char *nome )
 
 }
 
-/*void check_var(TabelaSimbolos *tb, char *nome ) 
+void check_funcao(TabelaFuncao *tb, char *nome ) 
 {
-    int idx = buscaTabelaSimbolos( tb, nome );
+    int idx = buscaTabelaFuncao( tb, nome );
 
     if (idx == -1) {
-        printf("SEMANTIC ERROR (%d): variable '%s' was not declared.\n", yylineno, nome);
+        printf("SEMANTIC ERROR (%d): function '%s' was not declared.\n", yylineno, nome);
         exit(1);
     }
 
-	TabelaSimbolos *it = getNodo( tb, nome );
-	insereNovaLinha( it, yylineno );
+	TabelaFuncao *it = getNodoFuncao( tb, nome );
+	insereNovaLinhaFuncao( it, yylineno );
 
 	
-}*/
+}
 
 
 TabelaSimbolos *newVar( TabelaSimbolos *tb,  char *nome )
