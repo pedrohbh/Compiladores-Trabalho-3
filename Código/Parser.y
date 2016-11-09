@@ -135,7 +135,7 @@ var_decl: INT ID SEMI
 			{
 				$$ = novoNodo( INTEGER_NODE );
 				tabelaSimbolos = newVar( tabelaSimbolos, tokenSimbolo );
-				printf("O valor do simbolo é: %s\n", tokenSimbolo );				
+				//printf("O valor do simbolo é: %s\n", tokenSimbolo );				
 			}
 			| INT ID LBRACK NUM RBRACK SEMI
 			{
@@ -354,7 +354,7 @@ TabelaSimbolos *newVar( TabelaSimbolos *tb,  char *nome )
 	
 	if ( idx != -1 )
 	{
-		printf("SEMANTIC ERROR (%d): variable ’%s’ already declared at line X.\n", yylineno, nome );
+		printf("SEMANTIC ERROR (%d): variable ’%s’ already declared at line %d.\n", yylineno, nome, getPrimeiraLinhaSimbolo( tb, nome ) );
 		exit( 1 );
 	}
 

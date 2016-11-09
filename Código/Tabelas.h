@@ -9,6 +9,8 @@ int buscaTabelaSimbolos( TabelaSimbolos *tb, char *nome );
 
 void insereNovaLinha( TabelaSimbolos *nodo, int linha );
 
+int getPrimeiraLinhaSimbolo( TabelaSimbolos *tb, char *nome );
+
 TabelaSimbolos *insereTabelaSimbolos( TabelaSimbolos *tb, char *nome, int linha );
 
 char *copiaString( char *string );

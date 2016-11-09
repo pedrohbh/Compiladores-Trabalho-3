@@ -62,7 +62,7 @@ whitespace [ \t]+
 "//"[^\n]* { /* FAZ NADA */ }
 "\""[^"\""]*"\"" { return STRING; }
 {numero} { return NUM; }
-{identificador} { int len = strlen( yytext ) + 1; tokenSimbolo = (char *)malloc(sizeof(char) * len); strcpy(tokenSimbolo, yytext );/*printf("ID = %s\n", yytext); tokenSimbolo = yytext;*/  return ID; }
+{identificador} { int len = strlen( yytext ) + 1; tokenSimbolo = (char *)malloc(sizeof(char) * len); if ( tokenSimbolo == NULL ) { printf("Erro ao alocar tokenSImbolo\n"); exit( 1 ); } strcpy(tokenSimbolo, yytext );  return ID; }
 {newline} { yylineno++; }
 {whitespace} { /* FAZ NADA */ }
 . { printf("SCANNING ERROR (%d): Unknown symbol %s\n", yylineno, yytext ); exit( 1 ); }

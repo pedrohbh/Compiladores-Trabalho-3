@@ -42,6 +42,17 @@ int buscaTabelaSimbolos( TabelaSimbolos *tb, char *nome )
 	return -1;
 }
 
+int getPrimeiraLinhaSimbolo( TabelaSimbolos *tb, char *nome )
+{
+	TabelaSimbolos *it;
+	for ( it = tb; it != NULL; it = it->proximoPtr )
+	{
+		if ( strcmp( nome, it->nome ) == 0 )
+			return it->linhas->linha;
+	}
+	return -1;
+}
+
 void insereNovaLinha( TabelaSimbolos *nodo, int linha )
 {
 	if ( nodo->linhas == NULL )
