@@ -8,6 +8,11 @@
 #include <stdlib.h>
 #include "Parser.h"
 #include "Arvore.h"
+
+extern char *tokenSimbolo;
+extern char *tokenLiteral;
+
+//void process_id();
 %}
 
 digito [0-9]
@@ -57,9 +62,14 @@ whitespace [ \t]+
 "//"[^\n]* { /* FAZ NADA */ }
 "\""[^"\""]*"\"" { return STRING; }
 {numero} { return NUM; }
-{identificador} { return ID; }
+{identificador} { tokenSimbolo = yytext;  return ID; }
 {newline} { yylineno++; }
 {whitespace} { /* FAZ NADA */ }
 . { printf("SCANNING ERROR (%d): Unknown symbol %s\n", yylineno, yytext ); exit( 1 ); }
 
 %%
+
+/*void process_id()
+{
+
+}*/

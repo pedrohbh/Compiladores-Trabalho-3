@@ -8,7 +8,7 @@ flex: Scanner.l
 	flex Scanner.l
 
 gcc: Scanner.c Parser.c Arvore.c
-	gcc -Wall -o trab3 Scanner.c Parser.c Arvore.c -ly
+	gcc -Wall -o trab3 Scanner.c Parser.c Arvore.c Tabelas.c -ly
 
 clean:
 	@rm -f *.o Scanner.c Parser.h Parser.c trab3

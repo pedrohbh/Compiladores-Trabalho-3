@@ -14,22 +14,27 @@
 
 %code requires{
 #include "Arvore.h"
+#include "Tabelas.h"
 }
 
 
 %{
 #include <stdio.h>
+#include <stdlib.h>
 #include "Parser.h"
 //#include "Arvore.h"
-#include "Tabelas.h"
+//#include "Tabelas.h"
 
 int yylex(void);
 void yyerror(char const *s);
+void newVar( TabelaSimbolos *tb,  char *nome );
 
 extern int yylineno;
 
 extern char *yytext;
 
+char *tokenSimbolo;
+char *tokenLiteral;
 
 TabelaSimbolos *tabelaSimbolos;
 
@@ -107,6 +112,8 @@ param_list: param_list COMMA param
 param: INT ID
 		{
 			$$ = novoNodo( INTEGER_NODE );
+			newVar( tabelaSimbolos, tokenSimbolo );
+			//printf("O valor do simbolo é: %s\n", tokenSimbolo );
 		}
 		| INT ID LBRACK RBRACK
 		{
@@ -125,7 +132,8 @@ var_decl_list: var_decl_list var_decl
 
 var_decl: INT ID SEMI
 			{
-				$$ = novoNodo( INTEGER_NODE );				
+				$$ = novoNodo( INTEGER_NODE );
+				printf("O valor do simbolo é: %s\n", tokenSimbolo );				
 			}
 			| INT ID LBRACK NUM RBRACK SEMI
 			{
@@ -247,7 +255,8 @@ write_call: WRITE LPAREN STRING RPAREN
 
 user_func_call: ID LPAREN opt_arg_list RPAREN
 					{
-						printf("ID = %s\n", yytext );
+						
+						//printf("ID = %s\n", yytext );
 						$$ = $3;
 					};
 
@@ -337,6 +346,35 @@ arith_expr: arith_expr PLUS arith_expr
 
 %%
 
+void newVar( TabelaSimbolos *tb,  char *nome )
+{
+	int idx = buscaTabelaSimbolos( tb, nome );
+	
+	if ( idx != -1 )
+	{
+		printf("SEMANTIC ERROR (%d): variable ’%s’ already declared at line X.\n", yylineno, nome );
+		exit( 1 );
+	}
+
+	/*tb =*/// insereTabelaSimbolos( tb, nome,  yylineno );
+
+}
+
+/*void new_var(int i) 
+{
+    char* name = get_name(aux, i);
+    int line = get_line(aux, i);
+    int idx = lookup_var(st, name);
+
+    if (idx != -1) {
+        printf("SEMANTIC ERROR (%d): variable '%s' already declared at line %d.\n",
+            line, name, get_line(st, idx));
+        exit(1);
+    }
+
+    add_var(st, name, line);
+}*/
+
 //void check_var
 
 void yyerror( char const *s )
@@ -349,8 +387,8 @@ int main()
 	int resultado = yyparse();
 	if ( resultado == 0 )
 	{
-		//printf("PARSE SUCESSFUL!\n");
-		print_dot( arvore );
+		printf("PARSE SUCESSFUL!\n");
+		//print_dot( arvore );
 	}
 
 	return 0;

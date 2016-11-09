@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include "Tabelas.h"
@@ -73,7 +74,7 @@ void insereNovaLinha( TabelaSimbolos *nodo, int linha )
 }		
 			
 
-void insereTabelaSimbolos( TabelaSimbolos *tb, char *nome, int linha )
+TabelaSimbolos *insereTabelaSimbolos( TabelaSimbolos *tb, char *nome, int linha )
 {
 	TabelaSimbolos *novoElemento = (TabelaSimbolos *)malloc( sizeof(TabelaSimbolos) );
 	
@@ -96,6 +97,8 @@ void insereTabelaSimbolos( TabelaSimbolos *tb, char *nome, int linha )
 		novoElemento->proximoPtr = tb;
 		tb = novoElemento;
 	}
+
+	return tb;
 }
 
 char *copiaString( char *string )
