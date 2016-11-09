@@ -28,6 +28,8 @@ void yyerror(char const *s);
 
 extern int yylineno;
 
+extern char *yytext;
+
 
 TabelaSimbolos *tabelaSimbolos;
 
@@ -240,11 +242,12 @@ output_call: OUTPUT LPAREN arith_expr RPAREN
 write_call: WRITE LPAREN STRING RPAREN
 				{ 
 					$$ = novoNodo( WRITE_NODE );
-					adicionaFilho( $$, 1, novoNodo( STRING_NODE ) );
+					//adicionaFilho( $$, 1, novoNodo( STRING_NODE ) );
 				};
 
 user_func_call: ID LPAREN opt_arg_list RPAREN
 					{
+						printf("ID = %s\n", yytext );
 						$$ = $3;
 					};
 
@@ -334,6 +337,8 @@ arith_expr: arith_expr PLUS arith_expr
 
 %%
 
+//void check_var
+
 void yyerror( char const *s )
 {
 	printf("PARSE ERROR (%d): %s\n", yylineno, s);
@@ -344,8 +349,8 @@ int main()
 	int resultado = yyparse();
 	if ( resultado == 0 )
 	{
-		printf("PARSE SUCESSFUL!\n");
-		//print_dot( arvore );
+		//printf("PARSE SUCESSFUL!\n");
+		print_dot( arvore );
 	}
 
 	return 0;

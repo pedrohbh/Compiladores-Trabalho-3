@@ -114,13 +114,13 @@ void node2str(TreeNode *node, char *s)
 int print_node_dot(TreeNode *node) {
 	int my_nr = nr++;
 	int i;
-	char s[ 15 ];
+	char s[ 20 ];
 	node2str( node, s );
     printf("node%d[label=\"%s\"];\n", my_nr, s);
     for ( i = 0; i < MAXCHILDREN; i++)
  	{
 		if ( node->filhosPtr[ i ] == NULL )
-			break;
+			continue;
         int child_nr = print_node_dot(node->filhosPtr[i]);
         printf("node%d -> node%d;\n", my_nr, child_nr);
     }
