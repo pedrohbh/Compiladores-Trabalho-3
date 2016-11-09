@@ -403,9 +403,10 @@ int main()
 	if ( resultado == 0 )
 	{
 		printf("PARSE SUCESSFUL!\n");
-		//imprimeTabelaSimbolos( tabelaSimbolos );
+		imprimeTabelaSimbolos( tabelaSimbolos );
 		//print_dot( arvore );
 	}
 
 	return 0;
 }
+
