@@ -3,8 +3,22 @@
 
 typedef struct linhaLista LinhaLista;
 
-typedef struct tabelaSimbolos TabelaSimbolos;
+typedef struct tabelaFuncao TabelaFuncao;
 
+typedef struct tabelaSimbolos TabelaSimbolos;
+//--------------------------------------Funcao
+
+int buscaTabelaFuncao( TabelaFuncao *tb, char *nome );
+
+TabelaFuncao *getNodoFuncao( TabelaFuncao *tb, char *nome );
+
+int getPrimeiraLinhaFuncao( TabelaFuncao *tb, char *nome );
+
+void insereNovaLinhaFuncao( TabelaFuncao *nodo, int linha );
+
+TabelaFuncao *insereTabelaFuncao( TabelaFuncao *tb, char *nome, int linha );
+
+//--------------------------------------Simbolos
 int buscaTabelaSimbolos( TabelaSimbolos *tb, char *nome );
 
 void insereNovaLinha( TabelaSimbolos *nodo, int linha );
