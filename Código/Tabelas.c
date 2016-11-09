@@ -20,6 +20,21 @@ struct tabelaSimbolos
 };
 
 
+int buscaTabelaSimbolos( TabelaSimbolos *tb, char *nome )
+{
+	TabelaSimbolos *it;
+	int i = 0;
+	for ( it = tb; it != NULL; it = it->proximoPtr )
+	{
+		if ( strcmp( nome, it->nome ) == 0 )
+			return i;
+
+		i++;
+	}
+
+	return -1;
+}
+
 void insereNovaLinha( TabelaSimbolos *nodo, int linha )
 {
 	if ( nodo->linhas == NULL )
@@ -30,6 +45,9 @@ void insereNovaLinha( TabelaSimbolos *nodo, int linha )
 			fprintf( stderr, "Falta de memória ao alocar linha do elemento da tabela de simbolos \"%s\". Linha: %d.\n", nodo->nome, linha );
 			exit( 1 );
 		}
+
+		nodo->linhas->linha = linha;
+		nodo->linhas->proximoPtr = NULL;
 	}
 	else
 	{

@@ -21,7 +21,7 @@
 #include <stdio.h>
 #include "Parser.h"
 //#include "Arvore.h"
-//#include "Tabelas.h"
+#include "Tabelas.h"
 
 int yylex(void);
 void yyerror(char const *s);
