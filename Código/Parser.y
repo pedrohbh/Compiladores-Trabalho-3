@@ -27,7 +27,7 @@
 
 int yylex(void);
 void yyerror(char const *s);
-void newVar( TabelaSimbolos *tb,  char *nome );
+TabelaSimbolos *newVar( TabelaSimbolos *tb,  char *nome );
 
 extern int yylineno;
 
@@ -112,7 +112,8 @@ param_list: param_list COMMA param
 param: INT ID
 		{
 			$$ = novoNodo( INTEGER_NODE );
-			newVar( tabelaSimbolos, tokenSimbolo );
+			tabelaSimbolos = newVar( tabelaSimbolos, tokenSimbolo );
+			free( tokenSimbolo );
 			//printf("O valor do simbolo é: %s\n", tokenSimbolo );
 		}
 		| INT ID LBRACK RBRACK
@@ -133,6 +134,7 @@ var_decl_list: var_decl_list var_decl
 var_decl: INT ID SEMI
 			{
 				$$ = novoNodo( INTEGER_NODE );
+				tabelaSimbolos = newVar( tabelaSimbolos, tokenSimbolo );
 				printf("O valor do simbolo é: %s\n", tokenSimbolo );				
 			}
 			| INT ID LBRACK NUM RBRACK SEMI
@@ -346,7 +348,7 @@ arith_expr: arith_expr PLUS arith_expr
 
 %%
 
-void newVar( TabelaSimbolos *tb,  char *nome )
+TabelaSimbolos *newVar( TabelaSimbolos *tb,  char *nome )
 {
 	int idx = buscaTabelaSimbolos( tb, nome );
 	
@@ -356,26 +358,11 @@ void newVar( TabelaSimbolos *tb,  char *nome )
 		exit( 1 );
 	}
 
-	/*tb =*/// insereTabelaSimbolos( tb, nome,  yylineno );
+	tb = insereTabelaSimbolos( tb, nome,  yylineno );
+
+	return tb;
 
 }
-
-/*void new_var(int i) 
-{
-    char* name = get_name(aux, i);
-    int line = get_line(aux, i);
-    int idx = lookup_var(st, name);
-
-    if (idx != -1) {
-        printf("SEMANTIC ERROR (%d): variable '%s' already declared at line %d.\n",
-            line, name, get_line(st, idx));
-        exit(1);
-    }
-
-    add_var(st, name, line);
-}*/
-
-//void check_var
 
 void yyerror( char const *s )
 {

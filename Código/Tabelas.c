@@ -91,12 +91,17 @@ TabelaSimbolos *insereTabelaSimbolos( TabelaSimbolos *tb, char *nome, int linha 
 
 
 	if ( tb == NULL )
+	{
 		tb = novoElemento;
+	}
 	else
 	{
 		novoElemento->proximoPtr = tb;
 		tb = novoElemento;
 	}
+
+	if ( tb == NULL )
+		printf("Não era pra ta NULOOOOO\n");
 
 	return tb;
 }
