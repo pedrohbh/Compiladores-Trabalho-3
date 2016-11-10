@@ -16,7 +16,6 @@ void process_string();
 void process_id();
 
 extern LitTable *lt;
-extern SymTable *aux;
 %}
 
 digito [0-9]
@@ -72,12 +71,6 @@ whitespace [ \t]+
 . { printf("SCANNING ERROR (%d): Unknown symbol %s\n", yylineno, yytext ); exit( 1 ); }
 
 %%
-
-void process_id() {
-    add_var(aux, yytext, yylineno);
-}
-
-
 
 void process_string() 
 {

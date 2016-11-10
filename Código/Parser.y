@@ -27,8 +27,6 @@ int yylex(void);
 void yyerror(char const *s);
 
 LitTable *lt;
-SymTable *st;
-SymTable *aux;
 
 
 TabelaSimbolos *newVar( TabelaSimbolos *tb,  char *nome );
@@ -433,30 +431,6 @@ void check_var(TabelaSimbolos *tb, char *nome )
 	insereNovaLinha( it, yylineno );
 
 	
-}
-
-void checkVar(int i) {
-    char* name = get_name(aux, i);
-    int line = get_line(aux, i);
-    int idx = lookup_var(st, name);
-    if (idx == -1) {
-        printf("SEMANTIC ERROR (%d): variable '%s' was not declared.\n", line, name);
-        exit(1);
-    }
-}
-
-void new_var(int i) {
-    char* name = get_name(aux, i);
-    int line = get_line(aux, i);
-    int idx = lookup_var(st, name);
-
-    if (idx != -1) {
-        printf("SEMANTIC ERROR (%d): variable '%s' already declared at line %d.\n",
-            line, name, get_line(st, idx));
-        exit(1);
-    }
-
-    add_var(st, name, line);
 }
 
 
