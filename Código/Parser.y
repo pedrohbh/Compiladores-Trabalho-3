@@ -27,6 +27,9 @@ int yylex(void);
 void yyerror(char const *s);
 
 LitTable *lt;
+SymTable *st;
+SymTable *aux;
+
 
 TabelaSimbolos *newVar( TabelaSimbolos *tb,  char *nome );
 void check_var(TabelaSimbolos *tb, char *nome );
@@ -80,12 +83,13 @@ func_decl: func_header func_body
 					adicionaFilho( $$, 2, $1, $2 );
 				};
 
-func_header: ret_type ID LPAREN params RPAREN
+func_header: ret_type ID { //printf("Nome função: %s\n", tokenSimbolo );
+					tabelaFuncao = novaFuncao( tabelaFuncao, tokenSimbolo ); } LPAREN params RPAREN
 				{
 					$$ = novoNodo( FUNC_HEADER_NODE );
 					adicionaFilho( $$, 2, $1, $4 );
 					//printf("Nome função: %s\n", tokenSimbolo );
-					tabelaFuncao = novaFuncao( tabelaFuncao, tokenSimbolo );
+					//tabelaFuncao = novaFuncao( tabelaFuncao, tokenSimbolo );
 					//free( tokenSimbolo );
 				};
 
@@ -124,7 +128,7 @@ param: INT ID
 		{
 			$$ = novoNodo( INTEGER_NODE );
 			tabelaSimbolos = newVar( tabelaSimbolos, tokenSimbolo );
-			printf("VAR: %s\n", tokenSimbolo );
+			//printf("VAR: %s\n", tokenSimbolo );
 			//free( tokenSimbolo );
 			//printf("O valor do simbolo é: %s\n", tokenSimbolo );
 		}
@@ -145,15 +149,14 @@ var_decl_list: var_decl_list var_decl
 						$$ = $1;
 					};
 
-var_decl: INT ID SEMI
+var_decl: INT ID { tabelaSimbolos = newVar( tabelaSimbolos, tokenSimbolo ); } SEMI
 			{
-				$$ = novoNodo( INTEGER_NODE );
-				tabelaSimbolos = newVar( tabelaSimbolos, tokenSimbolo );					
+				$$ = novoNodo( INTEGER_NODE );									
 			}
-			| INT ID LBRACK NUM RBRACK SEMI
+			| INT ID { tabelaSimbolos = newVar( tabelaSimbolos, tokenSimbolo ); } LBRACK NUM RBRACK SEMI
 			{
 				$$ = novoNodo( INTEGER_NODE );
-				tabelaSimbolos = newVar( tabelaSimbolos, tokenSimbolo );
+				
 			};
 
 stmt_list: stmt_list stmt
@@ -196,6 +199,7 @@ assign_stmt: lval ASSIGN arith_expr SEMI
 lval: ID
 		{
 			check_var( tabelaSimbolos, tokenSimbolo );
+			//tabelaSimbolos = newVar( tabelaSimbolos, tokenSimbolo );
 			//free( tokenSimbolo );
 			//$$ = novoNodo( LVAL_NODE ); Pode Dar problema aqui
 		}
@@ -203,6 +207,7 @@ lval: ID
 		{
 			$$ = novoNodo( NUMBER_NODE );
 			check_var( tabelaSimbolos, tokenSimbolo );
+			//tabelaSimbolos = newVar( tabelaSimbolos, tokenSimbolo );
 			//free( tokenSimbolo );
 			//$$ = novoNodo( LVAL_NODE );
 			//adicionaFilho( $$, 1, novoNodo( NUMBER_NODE ) );
@@ -276,11 +281,9 @@ write_call: WRITE LPAREN STRING RPAREN
 					//adicionaFilho( $$, 1, novoNodo( STRING_NODE ) );
 				};
 
-user_func_call: ID LPAREN opt_arg_list RPAREN
+user_func_call: ID { check_funcao( tabelaFuncao, tokenSimbolo ); } LPAREN opt_arg_list RPAREN
 					{
-						$$ = $3;
-						puts("1");
-						check_funcao( tabelaFuncao, tokenSimbolo );
+						$$ = $3;	
 						//free( tokenSimbolo );
 					};
 
@@ -431,6 +434,31 @@ void check_var(TabelaSimbolos *tb, char *nome )
 
 	
 }
+
+void checkVar(int i) {
+    char* name = get_name(aux, i);
+    int line = get_line(aux, i);
+    int idx = lookup_var(st, name);
+    if (idx == -1) {
+        printf("SEMANTIC ERROR (%d): variable '%s' was not declared.\n", line, name);
+        exit(1);
+    }
+}
+
+void new_var(int i) {
+    char* name = get_name(aux, i);
+    int line = get_line(aux, i);
+    int idx = lookup_var(st, name);
+
+    if (idx != -1) {
+        printf("SEMANTIC ERROR (%d): variable '%s' already declared at line %d.\n",
+            line, name, get_line(st, idx));
+        exit(1);
+    }
+
+    add_var(st, name, line);
+}
+
 
 void yyerror( char const *s )
 {
