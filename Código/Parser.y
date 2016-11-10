@@ -214,7 +214,7 @@ lval: ID
 		}
 		| ID LBRACK ID RBRACK
 		{
-			//check_var( tabelaSimbolos. tokenSimbolo );
+			check_var( tabelaSimbolos, tokenSimbolo );
 			//free( tokenSimbolo );
 		};
 
