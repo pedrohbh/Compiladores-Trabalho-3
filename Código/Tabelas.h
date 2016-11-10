@@ -6,7 +6,23 @@ typedef struct linhaLista LinhaLista;
 typedef struct tabelaFuncao TabelaFuncao;
 
 typedef struct tabelaSimbolos TabelaSimbolos;
-//--------------------------------------Funcao
+
+//-------------------------------------Literais-----------------------------------------------
+typedef struct lit_table LitTable;
+
+LitTable* create_lit_table();
+
+int add_literal(LitTable* lt, char* s);
+
+
+char* get_literal(LitTable* lt, int i);
+
+void print_lit_table(LitTable* lt);
+
+void free_lit_table(LitTable* lt);
+
+
+//--------------------------------------Funcao------------------------------------------------
 
 int buscaTabelaFuncao( TabelaFuncao *tb, char *nome );
 
@@ -18,7 +34,7 @@ void insereNovaLinhaFuncao( TabelaFuncao *nodo, int linha );
 
 TabelaFuncao *insereTabelaFuncao( TabelaFuncao *tb, char *nome, int linha );
 
-//--------------------------------------Simbolos
+//--------------------------------------Simbolos---------------------------------------------
 int buscaTabelaSimbolos( TabelaSimbolos *tb, char *nome );
 
 void insereNovaLinha( TabelaSimbolos *nodo, int linha );

@@ -26,6 +26,8 @@
 int yylex(void);
 void yyerror(char const *s);
 
+LitTable *lt;
+
 TabelaSimbolos *newVar( TabelaSimbolos *tb,  char *nome );
 void check_var(TabelaSimbolos *tb, char *nome );
 
@@ -37,7 +39,7 @@ extern int yylineno;
 extern char *yytext;
 
 char *tokenSimbolo;
-char *tokenLiteral;
+//char *tokenLiteral;
 
 TabelaSimbolos *tabelaSimbolos = NULL;
 TabelaFuncao *tabelaFuncao = NULL;
@@ -437,6 +439,7 @@ void yyerror( char const *s )
 
 int main()
 {
+	lt = create_lit_table();
 	int resultado = yyparse();
 	if ( resultado == 0 )
 	{

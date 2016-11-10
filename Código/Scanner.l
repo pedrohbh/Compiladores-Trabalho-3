@@ -7,12 +7,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Parser.h"
-#include "Arvore.h"
+//#include "Arvore.h"
 
 extern char *tokenSimbolo;
 extern char *tokenLiteral;
 
-void process_id();
+void process_string();
+
+extern LitTable *lt;
 %}
 
 digito [0-9]
@@ -60,7 +62,7 @@ whitespace [ \t]+
 "{" { return LBRACE; }
 "}" { return RBRACE; }
 "//"[^\n]* { /* FAZ NADA */ }
-"\""[^"\""]*"\"" { return STRING; }
+"\""[^"\""]*"\"" { process_string(); return STRING; }
 {numero} { return NUM; }
 {identificador} {  int len = strlen( yytext ) + 1; tokenSimbolo = (char *)malloc(sizeof(char) * len); if ( tokenSimbolo == NULL ) { printf("Erro ao alocar tokenSimbolo\n"); exit( 1 ); } strcpy(tokenSimbolo, yytext ); /*printf("ID = %s   ---->  %s\n", yytext, tokenSimbolo );*/ return ID; }
 {newline} { yylineno++; }
@@ -69,8 +71,7 @@ whitespace [ \t]+
 
 %%
 
-void process_id()
+void process_string() 
 {
-
+    add_literal(lt, yytext);
 }
-
